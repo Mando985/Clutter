@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import React from "react";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import {SafeAreaProvider} from "react-native-safe-area-context";
 
 export default function RootLayout() {
     const initDb = async (db: SQLiteDatabase) => {
@@ -16,8 +17,11 @@ export default function RootLayout() {
         );
     }
     return (
-        <SQLiteProvider databaseName="clutter.db" onInit={initDb}>
-            <Stack screenOptions={{headerShown:false}}/>
-        </SQLiteProvider>
+        <SafeAreaProvider>
+            <SQLiteProvider databaseName="clutter.db" onInit={initDb}>
+                <Stack screenOptions={{headerShown:false}}/>
+            </SQLiteProvider>
+        </SafeAreaProvider>
+
     );
 }

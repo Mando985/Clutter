@@ -5,6 +5,7 @@ import * as MediaLibrary from 'expo-media-library';
 import Albums from "@/app/(components)/Albums";
 import {SafeAreaView} from "react-native-safe-area-context";
 
+import { Platform } from 'react-native';
 export default function App() {
     const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
     const [loading,setLoading] = useState(false);
@@ -41,7 +42,10 @@ export default function App() {
                     </View>
             ) :
             (
-                <Albums/>
+                <SafeAreaView edges={Platform.OS === 'android' ? ['left','top', 'right'] : ['left','top', 'right']}
+                              style={{ flex: 1 }}>
+                    <Albums/>
+                </SafeAreaView>
             )
     )
 }

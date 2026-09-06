@@ -2,14 +2,14 @@ import * as MediaLibrary from 'expo-media-library';
 import { Link, useLocalSearchParams } from "expo-router";
 import React from 'react';
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ActivityIndicator, Dimensions, FlatList, Image, View } from "react-native";
+import {ActivityIndicator, Dimensions, FlatList, Image, Text, View} from "react-native";
 import { useSQLiteContext } from 'expo-sqlite';
 import { useFocusEffect } from 'expo-router';
+import {SafeAreaView} from "react-native-safe-area-context";
 
 const DisplayPhotos = () => {
     const { album_id } = useLocalSearchParams();
     const albumId = Array.isArray(album_id) ? album_id[0] : album_id;
-    if (!albumId) { console.log(`Error Occured, cannot fetch album`); }
 
     const [photos, setPhotos] = useState<MediaLibrary.Asset[]>([]);
     const [endCursor, setEndCursor] = useState<string | undefined>(undefined);
@@ -28,10 +28,10 @@ const DisplayPhotos = () => {
 
     useFocusEffect(
         useCallback(() => {
-            db.getAllAsync<{ asset_id: string }>('SELECT asset_id FROM clutter')
+            db.getAllAsync<{ asset_id: string }>('SELECT asset_id FROM clutter WHERE album_id = ?', albumId)
                 .then((rows) => setMovedIds(new Set(rows.map((r) => r.asset_id))))
                 .catch((error) => console.error(`Error fetching moved asset ids: ${error}`));
-        }, [])
+        }, [albumId])
     );
 
     const getPhotos = useCallback(async () => {
@@ -79,19 +79,20 @@ const DisplayPhotos = () => {
 
 
     return (
-        <View className="flex-1 bg-white">
+        <SafeAreaView >
+        <View >
             <FlatList
                 data={photos}
                 keyExtractor={(item) => item.id}
                 numColumns={numColumns}
-                contentContainerStyle={{ padding: gap }}
+                contentContainerStyle={{ padding: gap,paddingBottom: 12 }}
                 columnWrapperStyle={{ gap }}
                 onEndReached={getPhotos}
                 onEndReachedThreshold={0.5}
                 renderItem={({ item }) => (
                     <Link
                         href={{
-                            pathname: "/action/[id]",
+                            pathname: "/delete_action/[id]",
                             params: { album_id: album_id.toString(), asset_id: item.id, }
                         }}
                         asChild
@@ -130,6 +131,8 @@ const DisplayPhotos = () => {
                 }
             />
         </View>
+
+        </SafeAreaView>
     );
 }
 
