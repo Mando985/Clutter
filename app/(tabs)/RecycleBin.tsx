@@ -26,10 +26,14 @@ const RecycleBin = () => {
 
 
     const Delete = async ()=>{
-        if(!(photos.length ===0)){
-            await MediaLibrary.deleteAssetsAsync(photos.map((p) => p.asset_id));
-            await db.runAsync('DELETE FROM clutter');
-            setPhotos([]);
+        try{
+            if (!(photos.length === 0)) {
+                await MediaLibrary.deleteAssetsAsync(photos.map((p) => p.asset_id));
+                await db.runAsync('DELETE FROM clutter');
+                setPhotos([]);
+            }
+        }catch (error){
+            console.log(error);
         }
     }
 
@@ -37,8 +41,8 @@ const RecycleBin = () => {
 
     if(photos.length>0)
     return (
-        <SafeAreaView style={{flex:1}}>
-            <View style={{flex:1}}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#012a4a' }}>
+            <View style={{flex:1}} className="bg-[#012a4a]">
             <FlatList
                 data={photos}
                 keyExtractor={(item) => item.asset_id}
@@ -60,34 +64,33 @@ const RecycleBin = () => {
                     </Link>
                 )}
             />
+                <Pressable onPress={Delete} style={{
+                    position: 'absolute',
+                    bottom: 20,
+                    alignSelf: 'center',
+                    backgroundColor: '#f94144',
+                    paddingVertical: 12,
+                    paddingHorizontal: 24,
+                    borderRadius: 999,
+                    elevation: 4,
+                    shadowColor: '#000',
+                    shadowOpacity: 0.2,
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowRadius: 4,
+                }}>
+                    <View >
+                        <Text className="text-blue-100">Delete</Text>
+                    </View>
+                </Pressable>
             </View>
-            <View style={{flex:1}}>
-            <Pressable onPress={Delete} style={{
-                position: 'absolute',
-                bottom: 20,
-                alignSelf: 'center',
-                backgroundColor: '#22c55e',
-                paddingVertical: 12,
-                paddingHorizontal: 24,
-                borderRadius: 999,
-                elevation: 4,
-                shadowColor: '#000',
-                shadowOpacity: 0.2,
-                shadowOffset: { width: 0, height: 2 },
-                shadowRadius: 4,
-            }}>
-                <View >
-                    <Text>Delete</Text>
-                </View>
-            </Pressable>
-            </View>
+
         </SafeAreaView>
     );
 
     else
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <Text>Nothing in the Bin</Text>
+            <SafeAreaView style={{ flex: 1, backgroundColor: '#012a4a' }}>
+                <Text className="text-blue-100">Nothing in the Bin</Text>
             </SafeAreaView>
         );
 

@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import { Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
@@ -15,6 +15,8 @@ const ActionOnAsset = () => {
     const db: SQLiteDatabase = useSQLiteContext();
     const [pics, setPics] = useState<ClutterRow[]>([]);
     const [index, setIndex] = useState(0);
+    const isBusy = useRef(false);
+
 
     useEffect(() => {
         db.getAllAsync<ClutterRow>('SELECT asset_id, asset_uri, album_id FROM clutter')
@@ -35,56 +37,83 @@ const ActionOnAsset = () => {
         player.play();
     });
 
+
     const goNext = () => {
-         // already at/past "Done" screen, don't climb further
-        if (isVideo || index >= pics.length) try { player.pause(); } catch {}
-        if(!(index === pics.length-1)) {
-            setIndex((i) => i + 1);
+        if (isBusy.current) return;
+        isBusy.current = true;
+        try {
+            // already at/past "Done" screen, don't climb further
+            if (isVideo || index >= pics.length) try { player.pause(); } catch {}
+            if (!(index === pics.length - 1)) {
+                setIndex((i) => i + 1);
+            }
+        } finally {
+            isBusy.current = false;
         }
     };
 
     const goBack = () => {
-        if (index > 0) {
-            if (isVideo) try { player.pause(); } catch {}
-            setIndex((i) => i - 1);
+        if (isBusy.current) return;
+        isBusy.current = true;
+        try {
+            if (index > 0) {
+                if (isVideo) try { player.pause(); } catch {}
+                setIndex((i) => i - 1);
+            }
+        } finally {
+            isBusy.current = false;
         }
     };
 
     const restorePic = async () => {
-        if (isVideo) try { player.pause(); } catch {}
-        const assetId = current?.asset_id;
-        await db.runAsync('DELETE FROM clutter WHERE asset_id = ?', assetId);
-        setPics((prev) => prev.filter((pic) => pic.asset_id !== assetId));
+        if (isBusy.current) return;
+        isBusy.current = true;
+        try {
+            if (isVideo) try { player.pause(); } catch {}
+            const assetId = current?.asset_id;
+            await db.runAsync('DELETE FROM clutter WHERE asset_id = ?', assetId);
+            setPics((prev) => prev.filter((pic) => pic.asset_id !== assetId));
+        } finally {
+            isBusy.current = false;
+        }
     };
 
     if (current)
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <View>
-                    <Text>URI : {current.asset_uri}</Text>
-                    <Text>Number of assets: {pics.length}</Text>
-                    <Text>{index}</Text>
+            <SafeAreaView style={{ flex: 1,backgroundColor:"#012a4a"}} className="flex-col">
 
+                <View className="flex-1 grow">
                     {isVideo ? (
                         <VideoView
                             key={current.asset_id}
-                            style={{ width: 300, height: 300 }}
+                            style={{ flex: 1 }}
                             player={player}
                             nativeControls
                         />
                     ) : (
-                        <Image source={{ uri: current.asset_uri }} style={{ width: 300, height: 300 }} />
+                        <Image source={{ uri: current.asset_uri }} style={{ flex: 1 }} contentFit="contain" autoplay />
                     )}
                 </View>
-                <View>
-                    <Pressable onPress={goNext}>
-                        <View className="bg-green-500 h-15 m-5"><Text>Next</Text></View>
-                    </Pressable>
-                    <Pressable onPress={goBack}>
-                        <View className="bg-green-500 h-15 m-5"><Text>Back</Text></View>
-                    </Pressable>
+
+                <View className="h-70">
+                    <View className="flex-row">
+                        <Pressable className="flex-1" onPress={goBack}>
+                            <View className="rounded-xl items-center justify-center bg-[#277da1] h-20 mt-1">
+                                <Text className="font-mono font-bold text-5xl text-blue-100">Back</Text>
+                            </View>
+                        </Pressable>
+
+                        <Pressable className="flex-1" onPress={goNext}>
+                            <View className="rounded-xl items-center justify-center bg-[#43aa8b] h-20 ml-1 mt-1">
+                                <Text className="font-mono font-bold text-5xl text-blue-100">Next</Text>
+                            </View>
+                        </Pressable>
+                    </View>
+
                     <Pressable onPress={restorePic}>
-                        <View className="bg-green-500 h-15 m-5"><Text>Restore</Text></View>
+                        <View className="rounded-xl items-center justify-center bg-[#02c39a] h-45 m-1">
+                            <Text className="font-mono font-bold text-5xl text-blue-100">Restore</Text>
+                        </View>
                     </Pressable>
                 </View>
             </SafeAreaView>

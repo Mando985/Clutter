@@ -79,8 +79,8 @@ const DisplayPhotos = () => {
 
 
     return (
-        <SafeAreaView >
-        <View >
+        <SafeAreaView style={{ flex:1,backgroundColor: "#012a4a" }}>
+
             <FlatList
                 data={photos}
                 keyExtractor={(item) => item.id}
@@ -130,7 +130,6 @@ const DisplayPhotos = () => {
                     loadingMore ? <ActivityIndicator style={{ margin: 16 }} /> : null
                 }
             />
-        </View>
 
         </SafeAreaView>
     );
