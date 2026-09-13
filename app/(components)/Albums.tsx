@@ -14,7 +14,7 @@ const Albums = () => {
         useCallback(() => {
             const load = async () => {
                 const fetchedAlbums: Album[] = await MediaLibrary.getAlbumsAsync({
-                    includeSmartAlbums: true,
+                    includeSmartAlbums: true
                 });
 
                 const filteredAlbums = (
@@ -59,7 +59,7 @@ const Albums = () => {
                           params: {album_id: item.id.toString(),album_title:item.title.toString()},
                       }} asChild>
                           <Pressable
-                              className="bg-[#014f86] h-25 mx-2 my-1 rounded-2xl items-center justify-center flex flex-col mt-2">
+                              className="bg-[#013D68] h-25 mx-2 my-1 rounded-2xl items-center justify-center flex flex-col mt-2">
 
                               <View className="flex-1 ">
                                   <Text className="font-mono font-bold text-2xl text-blue-100">

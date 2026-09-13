@@ -45,7 +45,7 @@ const DisplayPhotos = () => {
                 mediaType: ['photo', 'video'],
                 first: 100,
                 after: endCursor,
-                sortBy: [['creationTime', false]],
+                sortBy: [['modificationTime', false]],
             });
 
             setPhotos((pictures) => {

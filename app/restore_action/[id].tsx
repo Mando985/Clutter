@@ -5,6 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Image } from "expo-image";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import { useVideoPlayer, VideoView } from "expo-video";
+import ActionSkeleton from "@/app/(components)/ActionSkeleton";
 
 type ClutterRow = { asset_id: string; asset_uri: string; album_id: string };
 
@@ -98,22 +99,37 @@ const ActionOnAsset = () => {
                 <View className="h-70">
                     <View className="flex-row">
                         <Pressable className="flex-1" onPress={goBack}>
-                            <View className="rounded-xl items-center justify-center bg-[#277da1] h-20 mt-1">
-                                <Text className="font-mono font-bold text-5xl text-blue-100">Back</Text>
-                            </View>
+                            {({ pressed }) => (
+                                <View
+                                    className="rounded-xl items-center justify-center h-20 mt-1"
+                                    style={{ backgroundColor: pressed ? "#1f6485" : "#277da1" }}
+                                >
+                                    <Text className="font-mono font-bold text-5xl text-blue-100">Back</Text>
+                                </View>
+                            )}
                         </Pressable>
 
                         <Pressable className="flex-1" onPress={goNext}>
-                            <View className="rounded-xl items-center justify-center bg-[#43aa8b] h-20 ml-1 mt-1">
-                                <Text className="font-mono font-bold text-5xl text-blue-100">Next</Text>
-                            </View>
+                            {({ pressed }) => (
+                                <View
+                                    className="rounded-xl items-center justify-center h-20 ml-1 mt-1"
+                                    style={{ backgroundColor: pressed ? "#38957c" : "#43aa8b" }}
+                                >
+                                    <Text className="font-mono font-bold text-5xl text-blue-100">Next</Text>
+                                </View>
+                            )}
                         </Pressable>
                     </View>
 
                     <Pressable onPress={restorePic}>
-                        <View className="rounded-xl items-center justify-center bg-[#02c39a] h-45 m-1">
-                            <Text className="font-mono font-bold text-5xl text-blue-100">Restore</Text>
-                        </View>
+                        {({ pressed }) => (
+                            <View
+                                className="rounded-xl items-center justify-center h-45 m-1"
+                                style={{ backgroundColor: pressed ? "#02ad8a" : "#02c39a" }}
+                            >
+                                <Text className="font-mono font-bold text-5xl text-blue-100">Restore</Text>
+                            </View>
+                        )}
                     </Pressable>
                 </View>
             </SafeAreaView>
@@ -121,7 +137,7 @@ const ActionOnAsset = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Text>Image Done {asset_id}</Text>
+            <ActionSkeleton/>
         </SafeAreaView>
     );
 };

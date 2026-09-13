@@ -90,7 +90,9 @@ const RecycleBin = () => {
     else
         return (
             <SafeAreaView style={{ flex: 1, backgroundColor: '#012a4a' }}>
-                <Text className="text-blue-100">Nothing in the Bin</Text>
+                <View className="flex-1 items-center justify-center">
+                    <Text className="text-blue-100 font-mono font-bold text-lg">Nothing in the Bin</Text>
+                </View>
             </SafeAreaView>
         );
 
