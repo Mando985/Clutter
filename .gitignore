@@ -43,4 +43,9 @@ app-example
 /android
 
 ref2.md
-.*
+
+.agents
+.claude
+.github
+.idea
+.vscode
