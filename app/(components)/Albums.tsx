@@ -12,11 +12,13 @@ const Albums = () => {
 
     useFocusEffect(
         useCallback(() => {
+            //loads all the media albums on your phone
             const load = async () => {
                 const fetchedAlbums: Album[] = await MediaLibrary.getAlbumsAsync({
                     includeSmartAlbums: true
                 });
 
+                //the loaded albums have some which are audio files exclusive, which then are filtered out
                 const filteredAlbums = (
                     await Promise.all(
                         fetchedAlbums.map(async (album) => {
@@ -32,9 +34,12 @@ const Albums = () => {
 
                 setAlbums(filteredAlbums);
 
+                //A list that stores how many assets have been marked per album
                 const rows: { album_id: string; count: number }[] = await db.getAllAsync(
                     'SELECT album_id, COUNT(*) as count FROM clutter GROUP BY album_id'
                 );
+
+                //From the above the above list, its then counted how many assets per album and stored as record
                 const countMap: Record<string, number> = {};
                 rows.forEach((row) => {
                     countMap[row.album_id] = row.count;

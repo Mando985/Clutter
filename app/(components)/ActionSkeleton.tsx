@@ -3,7 +3,7 @@ import React from "react";
 import {View} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-
+//simple skeleton to show when the action page isnt loaded
 const ActionSkeleton=()=> {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#012a4a" }} className="flex-col">

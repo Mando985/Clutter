@@ -23,7 +23,7 @@ export default function App() {
         }
     ,[loading,permissionResponse]);
 
-
+    //The app loads the screen depending on whether te appropriate permissions were gruanted or not
     return (
         (!loading)?
             (

@@ -26,6 +26,7 @@ const DisplayPhotos = () => {
     const gap = 3;
     const photoSize = (width - gap * (numColumns + 1)) / numColumns;
 
+    //Checks by the db to get all the assets marked in this particular album
     useFocusEffect(
         useCallback(() => {
             db.getAllAsync<{ asset_id: string }>('SELECT asset_id FROM clutter WHERE album_id = ?', albumId)
@@ -108,6 +109,8 @@ const DisplayPhotos = () => {
                                     }}
                                     resizeMode="cover"
                                 />
+
+                                {/*A red colour is placed above the thumbnail to show is marked */}
                                 {movedIds.has(item.id) && (
                                     <View
                                         style={{

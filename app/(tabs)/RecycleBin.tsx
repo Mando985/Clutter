@@ -5,6 +5,8 @@ import { useSQLiteContext } from 'expo-sqlite';
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as MediaLibrary from 'expo-media-library';
 
+
+
 const RecycleBin = () => {
     const [photos, setPhotos] = useState<{ asset_id: string; asset_uri: string }[]>([]);
     const [loading, setLoading] = useState(true);
@@ -14,6 +16,8 @@ const RecycleBin = () => {
     const gap = 3;
     const photoSize = (width - gap * (numColumns + 1)) / numColumns;
 
+
+    //Gets the list of assets that were marked to be deleted from the sqlite database
     useFocusEffect(
         useCallback(() => {
             setLoading(true);
@@ -39,6 +43,7 @@ const RecycleBin = () => {
 
     if (loading) return <ActivityIndicator style={{ margin: 16 }} />;
 
+    //if there is a list of photos, it will display it as a grid of 4xn
     if(photos.length>0)
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#012a4a' }}>

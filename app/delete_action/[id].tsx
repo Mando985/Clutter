@@ -77,6 +77,7 @@ const ActionOnAsset = () => {
             isBusy.current = false;
         }
     }
+
     const goBack = () => {
         if (isBusy.current) return;
         isBusy.current = true;
@@ -141,37 +142,41 @@ const ActionOnAsset = () => {
             <SafeAreaView style={{ flex: 1,backgroundColor:"#012a4a" }} className="flex-col">
 
                 <View className="flex-1  grow">
-                    {(pics[index]?.mediaType==='video')?(
+                    {(pics[index]?.mediaType === 'video') ? (
                         <VideoView
                             key={pics[index]?.id}
-                            style={{ flex:1}}
+                            style={{flex: 1}}
                             player={player}
                             nativeControls
                         />
 
-                        ):(
-                        <Image source={{uri: displayUri}} style={{ flex:1}} contentFit="contain"  autoplay/>
+                    ) : (
+                        <Image source={{uri: displayUri}} style={{flex: 1}} contentFit="contain" autoplay/>
                     )}
                 </View>
 
                 <View className="h-70">
                     <View className="flex-row">
-                        <Pressable className="flex-1" onPress={() => { goBack() }}>
-                            {({ pressed }) => (
+                        <Pressable className="flex-1" onPress={() => {
+                            goBack()
+                        }}>
+                            {({pressed}) => (
                                 <View
                                     className="rounded-xl items-center justify-center h-20 mt-1"
-                                    style={{ backgroundColor: pressed ? "#1f6485" : "#277da1" }}
+                                    style={{backgroundColor: pressed ? "#1f6485" : "#277da1"}}
                                 >
                                     <Text className="font-mono font-bold text-5xl text-blue-100">Back</Text>
                                 </View>
                             )}
                         </Pressable>
 
-                        <Pressable className="flex-1" onPress={() => { goNext() }}>
-                            {({ pressed }) => (
+                        <Pressable className="flex-1" onPress={() => {
+                            goNext()
+                        }}>
+                            {({pressed}) => (
                                 <View
                                     className="rounded-xl items-center justify-center h-20 ml-1 mt-1"
-                                    style={{ backgroundColor: pressed ? "#38957c" : "#43aa8b" }}
+                                    style={{backgroundColor: pressed ? "#38957c" : "#43aa8b"}}
                                 >
                                     <Text className="font-mono font-bold text-5xl text-blue-100">Next</Text>
                                 </View>
@@ -179,11 +184,13 @@ const ActionOnAsset = () => {
                         </Pressable>
                     </View>
 
-                    <Pressable onPress={() => { deletePic() }}>
-                        {({ pressed }) => (
+                    <Pressable onPress={() => {
+                        deletePic()
+                    }}>
+                        {({pressed}) => (
                             <View
                                 className="rounded-xl items-center justify-center h-45 m-1"
-                                style={{ backgroundColor: pressed ? "#d93033" : "#f94144" }}
+                                style={{backgroundColor: pressed ? "#d93033" : "#f94144"}}
                             >
                                 <Text className="font-mono font-bold text-5xl text-blue-100">Delete</Text>
                             </View>
@@ -191,8 +198,6 @@ const ActionOnAsset = () => {
                     </Pressable>
                 </View>
             </SafeAreaView>
-
-
         );
 
     return (
